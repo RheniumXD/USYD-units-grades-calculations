@@ -1,0 +1,69 @@
+def get_float_input(prompt):
+    while True:
+        try:
+            value = float(input(prompt))
+            if 0 <= value <= 100:
+                return value
+            print("Please enter a number between 0 and 100.")
+        except ValueError:
+            print("Invalid input. Please enter a valid number.")
+
+def get_weekly_quiz_scores():
+    print("\nEnter Weekly Quiz scores (each out of 10, up to 12 entries):")
+    scores = []
+    for i in range(1, 13):
+        inp = input(f"Week {i} Quiz score (press Enter to skip): ")
+        if inp == "":
+            continue
+        try:
+            score = float(inp)
+            if 0 <= score <= 10:
+                scores.append(score)
+            else:
+                print("Enter a number between 0 and 10.")
+        except ValueError:
+            print("Invalid input. Skipping this entry.")
+    scores.sort(reverse=True)
+    top10_total = sum(scores[:10])
+    percentage = top10_total
+    return percentage
+
+def main():
+    print("Final Mark Calculator")
+
+    weekly = get_weekly_quiz_scores()
+    project1 = get_float_input("Project 1 score (%): ")
+    project2 = get_float_input("Project 2 score (%): ")
+    presentation = get_float_input("Grand Challenge Presentation score (%): ")
+    report = get_float_input("Grand Challenge Report score (%): ")
+    final_exam = get_float_input("Final Exam score (%): ")
+
+    weights = {
+        "Weekly Quizzes": 10,
+        "Project 1": 10,
+        "Project 2": 10,
+        "Presentation": 5,
+        "Report": 15,
+        "Final Exam": 50
+    }
+
+    total = (
+        weekly * weights["Weekly Quizzes"] +
+        project1 * weights["Project 1"] +
+        project2 * weights["Project 2"] +
+        presentation * weights["Presentation"] +
+        report * weights["Report"] +
+        final_exam * weights["Final Exam"]
+    ) / 100
+
+    print(f"\nEstimated final grade: {total:.2f}%")
+
+    if final_exam < 40:
+        print("Warning: Final Exam score is below 40%. You may not pass the course.")
+    elif total < 50:
+        print("Warning: Overall score is below 50%. You may not pass the course.")
+    else:
+        print("You meet the minimum requirements to pass the course.")
+
+if __name__ == "__main__":
+    main()
